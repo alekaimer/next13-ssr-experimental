@@ -1,4 +1,6 @@
+import React from 'react'
 import Link from 'next/link'
+import styles from '../app/page.module.css'
 
 export default function Home() {
   return (
@@ -12,6 +14,13 @@ export default function Home() {
           Server component
         </Link>
       </pre>
+
+      <a
+        href="https://beta.nextjs.org/docs/rendering/server-and-client-components"
+        className={styles.link}
+      >
+        https://beta.nextjs.org/docs/rendering/server-and-client-components
+      </a>
     </main>
   )
 }
