@@ -1,28 +1,23 @@
 import { Inter } from 'next/font/google'
 import { useCallback, useEffect, useState } from 'react'
+import { getData } from '@/utils/getData'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const getData = async (url: string) => {
-  const data = await fetch(url)
-  const json = await data.json()
-
-  console.log('Hello from client')
-
-  return json
-}
-
 export default function Home() {
-  const [user, setUser] = useState(null)
-  const [error, setError] = useState(null)
+  const [user, setUser] = useState<{} | unknown>({})
+  const [error, setError] = useState<string>()
   const [loading, setLoading] = useState(true)
 
   const fetchData = useCallback(async () => {
     try {
-      const data = await getData('https://api.github.com/users/alekaimer/repos')
+      const data = await getData(
+        'https://api.github.com/users/alekaimer/repos',
+        () => console.log('Hello from client'),
+      )
       setUser(data)
-    } catch (error: any) {
-      setError(error)
+    } catch (error) {
+      setError(error as string)
     } finally {
       setLoading(false)
     }
@@ -31,6 +26,15 @@ export default function Home() {
   useEffect(() => {
     fetchData()
   }, [fetchData])
+
+  if (error) {
+    return (
+      <pre>
+        <h1>Error</h1>
+        <pre>{error}</pre>
+      </pre>
+    )
+  }
 
   return (
     <div>
@@ -43,12 +47,6 @@ export default function Home() {
           <h1>Client request</h1>
           <p>Return:</p> <pre>{JSON.stringify(user, null, 2)}</pre>
         </>
-      )}
-
-      {error && (
-        <pre>
-          <h1>{error}</h1>
-        </pre>
       )}
     </div>
   )

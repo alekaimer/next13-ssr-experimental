@@ -1,17 +1,13 @@
 'use client'
 import { use } from 'react'
-
-async function getData() {
-  const data = await fetch('https://api.github.com/users/alekaimer/repos')
-  const json = await data.json()
-
-  console.log('Hello from client')
-
-  return json
-}
+import { getData } from '@/utils/getData'
 
 export default function ClientComponent() {
-  const data = use(getData())
+  const data = use(
+    getData('https://api.github.com/users/alekaimer/repos', () =>
+      console.log('Hello from client'),
+    ),
+  )
 
   return (
     <main>
